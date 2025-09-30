@@ -43,9 +43,9 @@
               }
             }
           },
-          "LoadFile": {
-            "list-name": "Load File",
-            "display-text": "Load file {0}",
+          "LoadAudio": {
+            "list-name": "Load Audio",
+            "display-text": "Load audio {0}",
             "description": "Load a single audio file",
             "params": {
               "file": {
@@ -65,9 +65,9 @@
               }
             }
           },
-          "UnloadFile": {
-            "list-name": "Unload File",
-            "display-text": "Unload file {0}",
+          "UnloadAudio": {
+            "list-name": "Unload Audio",
+            "display-text": "Unload audio {0}",
             "description": "Unload a single audio file",
             "params": {
               "file": {
@@ -89,9 +89,9 @@
           }
         },
         "conditions": {
-          "IsFileLoaded": {
-            "list-name": "Is File Loaded",
-            "display-text": "Is file {0} loaded",
+          "IsAudioLoaded": {
+            "list-name": "Is Audio Loaded",
+            "display-text": "Is audio {0} loaded",
             "description": "Check if a specific audio file is loaded",
             "params": {
               "file": {
@@ -110,6 +110,30 @@
                 "desc": "Group name"
               }
             }
+          },
+          "OnAnyAudioLoaded": {
+            "list-name": "On Any Audio Loaded",
+            "display-text": "On any audio loaded",
+            "description": "Triggered when any audio file is loaded",
+            "params": {}
+          },
+          "OnAnyAudioUnloaded": {
+            "list-name": "On Any Audio Unloaded",
+            "display-text": "On any audio unloaded",
+            "description": "Triggered when any audio file is unloaded",
+            "params": {}
+          },
+          "OnAnyGroupLoaded": {
+            "list-name": "On Any Group Loaded",
+            "display-text": "On any group loaded",
+            "description": "Triggered when any group is loaded",
+            "params": {}
+          },
+          "OnAnyGroupUnloaded": {
+            "list-name": "On Any Group Unloaded",
+            "display-text": "On any group unloaded",
+            "description": "Triggered when any group is unloaded",
+            "params": {}
           },
           "OnAudioLoaded": {
             "list-name": "On Audio Loaded",
@@ -166,6 +190,26 @@
                 "desc": "Group name"
               }
             }
+          },
+          "LastLoadedAudio": {
+            "translated-name": "LastLoadedAudio",
+            "description": "Returns the name of the last audio file that was loaded",
+            "params": {}
+          },
+          "LastLoadedGroup": {
+            "translated-name": "LastLoadedGroup",
+            "description": "Returns the name of the last group that was loaded",
+            "params": {}
+          },
+          "LastUnloadedAudio": {
+            "translated-name": "LastUnloadedAudio",
+            "description": "Returns the name of the last audio file that was unloaded",
+            "params": {}
+          },
+          "LastUnloadedGroup": {
+            "translated-name": "LastUnloadedGroup",
+            "description": "Returns the name of the last group that was unloaded",
+            "params": {}
           }
         }
       }

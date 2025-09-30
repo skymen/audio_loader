@@ -67,6 +67,7 @@ action(
     if (!this.groups.has(group)) {
       this.groups.set(group, new Set());
     }
+    debugger;
     this.groups.get(group).add(file);
   }
 );
@@ -103,6 +104,7 @@ action(
   function (file, group) {
     const files = this.groups.get(group);
     if (!files) return;
+    debugger;
     files.delete(file);
     if (files.size === 0) this.groups.delete(group);
   }
@@ -110,13 +112,13 @@ action(
 
 action(
   category_load,
-  "LoadFile",
+  "LoadAudio",
   {
     highlight: false,
     deprecated: false,
     isAsync: false,
-    listName: "Load File",
-    displayText: "Load file {0}",
+    listName: "Load Audio",
+    displayText: "Load audio {0}",
     description: "Load a single audio file",
     params: [
       {
@@ -134,13 +136,13 @@ action(
 
 action(
   category_load,
-  "UnloadFile",
+  "UnloadAudio",
   {
     highlight: false,
     deprecated: false,
     isAsync: false,
-    listName: "Unload File",
-    displayText: "Unload file {0}",
+    listName: "Unload Audio",
+    displayText: "Unload audio {0}",
     description: "Unload a single audio file",
     params: [
       {
@@ -180,7 +182,7 @@ action(
   function (group) {
     const files = this.groups.get(group);
     if (!files || files.size === 0) return;
-    for (const file of files) this.LoadFile(file);
+    for (const file of files) this.LoadAudio(file);
   }
 );
 
@@ -208,7 +210,7 @@ action(
   function (group) {
     const files = this.groups.get(group);
     if (!files || files.size === 0) return;
-    for (const file of files) this.UnloadFile(file);
+    for (const file of files) this.UnloadAudio(file);
   }
 );
 
@@ -248,12 +250,12 @@ action(
 
 condition(
   category_load,
-  "IsFileLoaded",
+  "IsAudioLoaded",
   {
     highlight: false,
     deprecated: false,
-    listName: "Is File Loaded",
-    displayText: "Is file {0} loaded",
+    listName: "Is Audio Loaded",
+    displayText: "Is audio {0} loaded",
     description: "Check if a specific audio file is loaded",
     params: [
       {
@@ -294,7 +296,7 @@ condition(
   function (group) {
     const files = this.groups.get(group);
     if (!files || files.size === 0) return false;
-    for (const file of files) if (!this.IsFileLoaded(file)) return false;
+    for (const file of files) if (!this.IsAudioLoaded(file)) return false;
     return true;
   }
 );
@@ -320,7 +322,7 @@ expression(
     const files = this.groups.get(group);
     if (!files || files.size === 0) return 0;
     let loaded = 0;
-    for (const file of files) if (this.IsFileLoaded(file)) loaded++;
+    for (const file of files) if (this.IsAudioLoaded(file)) loaded++;
     return Math.round((loaded / files.size) * 100);
   },
   false
@@ -428,4 +430,136 @@ condition(
   function (group) {
     return group === this._lastUnloadedGroup;
   }
+);
+
+condition(
+  category_load,
+  "OnAnyGroupLoaded",
+  {
+    highlight: false,
+    deprecated: false,
+    isTrigger: true,
+    listName: "On Any Group Loaded",
+    displayText: "On any group loaded",
+    description: "Triggered when any group is loaded",
+    params: [],
+  },
+  function () {
+    return true;
+  }
+);
+
+condition(
+  category_load,
+  "OnAnyGroupUnloaded",
+  {
+    highlight: false,
+    deprecated: false,
+    isTrigger: true,
+    listName: "On Any Group Unloaded",
+    displayText: "On any group unloaded",
+    description: "Triggered when any group is unloaded",
+    params: [],
+  },
+  function () {
+    return true;
+  }
+);
+
+condition(
+  category_load,
+  "OnAnyAudioLoaded",
+  {
+    highlight: false,
+    deprecated: false,
+    isTrigger: true,
+    listName: "On Any Audio Loaded",
+    displayText: "On any audio loaded",
+    description: "Triggered when any audio file is loaded",
+    params: [],
+  },
+  function () {
+    return true;
+  }
+);
+
+condition(
+  category_load,
+  "OnAnyAudioUnloaded",
+  {
+    highlight: false,
+    deprecated: false,
+    isTrigger: true,
+    listName: "On Any Audio Unloaded",
+    displayText: "On any audio unloaded",
+    description: "Triggered when any audio file is unloaded",
+    params: [],
+  },
+  function () {
+    return true;
+  }
+);
+
+expression(
+  category_load,
+  "LastUnloadedGroup",
+  {
+    highlight: false,
+    deprecated: false,
+    returnType: "string",
+    description: "Returns the name of the last group that was unloaded",
+    params: [],
+  },
+  function () {
+    return this._lastUnloadedGroup || "";
+  },
+  false
+);
+
+expression(
+  category_load,
+  "LastLoadedGroup",
+  {
+    highlight: false,
+    deprecated: false,
+    returnType: "string",
+    description: "Returns the name of the last group that was loaded",
+    params: [],
+  },
+  function () {
+    return this._lastLoadedGroup || "";
+  },
+  false
+);
+
+expression(
+  category_load,
+  "LastUnloadedAudio",
+  {
+    highlight: false,
+    deprecated: false,
+    returnType: "string",
+    description: "Returns the name of the last audio file that was unloaded",
+    params: [],
+  },
+  function () {
+    return this._lastUnloadedAudio || "";
+  },
+  false
+);
+
+expression(
+  category_load,
+  "LastLoadedAudio",
+  {
+    highlight: false,
+    deprecated: false,
+    returnType: "string",
+    description: "Returns the name of the last audio file that was loaded",
+    params: [],
+  },
+  function () {
+    return this._lastLoadedAudio || "";
+  },
+  false
 );

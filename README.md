@@ -60,6 +60,10 @@ npm run dev
 | --- | --- | --- |
 | Is File Loaded | Check if a specific audio file is loaded | File *(string)* <br> |
 | Is Group Loaded | Check if all files in a group are loaded | Group *(string)* <br> |
+| On Any Audio Loaded | Triggered when any audio file is loaded |  |
+| On Any Audio Unloaded | Triggered when any audio file is unloaded |  |
+| On Any Group Loaded | Triggered when any group is loaded |  |
+| On Any Group Unloaded | Triggered when any group is unloaded |  |
 | On Audio Loaded | Triggered when an audio file is loaded | File *(string)* <br> |
 | On Audio Unloaded | Triggered when an audio file is unloaded | File *(string)* <br> |
 | On Group Loaded | Triggered when all files in a group are loaded | Group *(string)* <br> |
@@ -71,3 +75,7 @@ npm run dev
 | Expression | Description | Return Type | Params
 | --- | --- | --- | --- |
 | GroupLoadPercent | Returns the load percentage for a group (0-100) | number | Group *(string)* <br> | 
+| LastLoadedAudio | Returns the name of the last audio file that was loaded | string |  | 
+| LastLoadedGroup | Returns the name of the last group that was loaded | string |  | 
+| LastUnloadedAudio | Returns the name of the last audio file that was unloaded | string |  | 
+| LastUnloadedGroup | Returns the name of the last group that was unloaded | string |  | 

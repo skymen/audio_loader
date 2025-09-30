@@ -21,8 +21,8 @@ export default function (parentClass) {
       if (properties) {
       }
       this.groups = new Map();
-      this.loadedAudio = new Map();
-      this.loadedGroups = new Map();
+      this.loadedAudio = new Set();
+      this.loadedGroups = new Set();
       this._lastLoadedGroup = null;
       this._lastUnloadedGroup = null;
       this._lastLoadedAudio = null;
@@ -37,10 +37,13 @@ export default function (parentClass) {
 
     async _updateLoadedAudioStatus(audio, loaded) {
       if (!audio) return;
-      console.log("updateLoadedAudioStatus", audio, loaded);
-      let curLoadedStatus = this.loadedAudio.get(audio) || false;
+      let curLoadedStatus = this.loadedAudio.has(audio);
       if (curLoadedStatus === loaded) return;
-      this.loadedAudio.set(audio, loaded);
+      if (loaded) {
+        this.loadedAudio.add(audio);
+      } else {
+        this.loadedAudio.delete(audio);
+      }
 
       if (loaded) {
         this._lastLoadedAudio = audio;
@@ -52,26 +55,27 @@ export default function (parentClass) {
         this._trigger("OnAnyAudioUnloaded");
       }
 
-      for (const group of this.groups.values()) {
+      for (const groupName of this.groups.keys()) {
+        const group = this.groups.get(groupName);
         if (group.has(audio)) {
-          if (loaded && !this.loadedGroups.has(group)) {
+          if (loaded && !this.loadedGroups.has(groupName)) {
             for (const audio of group) {
               if (!this.loadedAudio.has(audio)) {
                 return;
               }
             }
-            this.loadedGroups.set(group, true);
-            this._lastLoadedGroup = group;
+            this.loadedGroups.add(groupName);
+            this._lastLoadedGroup = groupName;
             this._trigger("OnGroupLoaded");
             this._trigger("OnAnyGroupLoaded");
-          } else if (!loaded && this.loadedGroups.has(group)) {
+          } else if (!loaded && this.loadedGroups.has(groupName)) {
             for (const audio of group) {
               if (this.loadedAudio.has(audio)) {
                 return;
               }
             }
-            this.loadedGroups.delete(group);
-            this._lastUnloadedGroup = group;
+            this.loadedGroups.delete(groupName);
+            this._lastUnloadedGroup = groupName;
             this._trigger("OnGroupUnloaded");
             this._trigger("OnAnyGroupUnloaded");
           }

@@ -135,7 +135,9 @@ action(
         file
       );
     if (!audioFile) return;
-    await globalThis.__skymen_audio_instance.PreloadByName(
+
+    await globalThis.__skymen_audio_instance.CallAction(
+      C3.Plugins.Audio.Acts.PreloadByName,
       audioFile.isMusic ? 1 : 0,
       audioFile.fileName
     );
@@ -169,7 +171,8 @@ action(
         file
       );
     if (!audioFile) return;
-    await globalThis.__skymen_audio_instance.UnloadAudioByName(
+    await globalThis.__skymen_audio_instance.CallAction(
+      C3.Plugins.Audio.Acts.UnloadAudioByName,
       audioFile.isMusic ? 1 : 0,
       audioFile.fileName
     );
@@ -200,7 +203,7 @@ action(
   async function (group) {
     const files = this.groups.get(group);
     if (!files || files.size === 0) return;
-    await Promise.all(files.map((file) => this.LoadAudio(file)));
+    await Promise.all([...files].map((file) => this.LoadAudio(file)));
   }
 );
 
@@ -228,7 +231,7 @@ action(
   async function (group) {
     const files = this.groups.get(group);
     if (!files || files.size === 0) return;
-    await Promise.all(files.map((file) => this.UnloadAudio(file)));
+    await Promise.all([...files].map((file) => this.UnloadAudio(file)));
   }
 );
 

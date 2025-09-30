@@ -67,7 +67,6 @@ action(
     if (!this.groups.has(group)) {
       this.groups.set(group, new Set());
     }
-    debugger;
     this.groups.get(group).add(file);
   }
 );
@@ -104,7 +103,6 @@ action(
   function (file, group) {
     const files = this.groups.get(group);
     if (!files) return;
-    debugger;
     files.delete(file);
     if (files.size === 0) this.groups.delete(group);
   }
@@ -116,7 +114,7 @@ action(
   {
     highlight: false,
     deprecated: false,
-    isAsync: false,
+    isAsync: true,
     listName: "Load Audio",
     displayText: "Load audio {0}",
     description: "Load a single audio file",
@@ -131,7 +129,17 @@ action(
       },
     ],
   },
-  function (file) {}
+  async function (file) {
+    let audioFile =
+      globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles.get(
+        file
+      );
+    if (!audioFile) return;
+    await globalThis.__skymen_audio_instance.PreloadByName(
+      audioFile.isMusic ? 1 : 0,
+      audioFile.fileName
+    );
+  }
 );
 
 action(
@@ -140,7 +148,7 @@ action(
   {
     highlight: false,
     deprecated: false,
-    isAsync: false,
+    isAsync: true,
     listName: "Unload Audio",
     displayText: "Unload audio {0}",
     description: "Unload a single audio file",
@@ -155,7 +163,17 @@ action(
       },
     ],
   },
-  function (file) {}
+  async function (file) {
+    let audioFile =
+      globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles.get(
+        file
+      );
+    if (!audioFile) return;
+    await globalThis.__skymen_audio_instance.UnloadAudioByName(
+      audioFile.isMusic ? 1 : 0,
+      audioFile.fileName
+    );
+  }
 );
 
 action(
@@ -164,7 +182,7 @@ action(
   {
     highlight: false,
     deprecated: false,
-    isAsync: false,
+    isAsync: true,
     listName: "Load Group",
     displayText: "Load group {0}",
     description: "Load all audio files in a group",
@@ -179,10 +197,10 @@ action(
       },
     ],
   },
-  function (group) {
+  async function (group) {
     const files = this.groups.get(group);
     if (!files || files.size === 0) return;
-    for (const file of files) this.LoadAudio(file);
+    await Promise.all(files.map((file) => this.LoadAudio(file)));
   }
 );
 
@@ -192,7 +210,7 @@ action(
   {
     highlight: false,
     deprecated: false,
-    isAsync: false,
+    isAsync: true,
     listName: "Unload Group",
     displayText: "Unload group {0}",
     description: "Unload all audio files in a group",
@@ -207,10 +225,10 @@ action(
       },
     ],
   },
-  function (group) {
+  async function (group) {
     const files = this.groups.get(group);
     if (!files || files.size === 0) return;
-    for (const file of files) this.UnloadAudio(file);
+    await Promise.all(files.map((file) => this.UnloadAudio(file)));
   }
 );
 
@@ -269,7 +287,7 @@ condition(
     ],
   },
   function (file) {
-    return true;
+    return this.loadedAudio.get(file) || false;
   }
 );
 

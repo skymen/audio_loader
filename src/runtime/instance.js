@@ -2,6 +2,18 @@ import { id, addonType } from "../../config.caw.js";
 import AddonTypeMap from "../../template/addonTypeMap.js";
 
 export default function (parentClass) {
+  if (self.C3.Plugins.Audio.Instance) {
+    self.C3.Plugins.Audio.Instance = class extends (
+      self.C3.Plugins.Audio.Instance
+    ) {
+      constructor(...args) {
+        super(...args);
+        globalThis.__skymen_audio_instance = this;
+      }
+    };
+  } else {
+    alert("This plugin requires the Audio addon to be added to the project");
+  }
   return class extends parentClass {
     constructor() {
       super();
@@ -15,7 +27,6 @@ export default function (parentClass) {
       this._lastUnloadedGroup = null;
       this._lastLoadedAudio = null;
       this._lastUnloadedAudio = null;
-
       this._addDOMMessageHandler(
         "update-audio-loaded-status",
         ([audio, loaded]) => {
@@ -24,7 +35,9 @@ export default function (parentClass) {
       );
     }
 
-    _updateLoadedAudioStatus(audio, loaded) {
+    async _updateLoadedAudioStatus(audio, loaded) {
+      if (!audio) return;
+      console.log("updateLoadedAudioStatus", audio, loaded);
       let curLoadedStatus = this.loadedAudio.get(audio) || false;
       if (curLoadedStatus === loaded) return;
       this.loadedAudio.set(audio, loaded);
@@ -32,9 +45,11 @@ export default function (parentClass) {
       if (loaded) {
         this._lastLoadedAudio = audio;
         this._trigger("OnAudioLoaded");
+        this._trigger("OnAnyAudioLoaded");
       } else {
         this._lastUnloadedAudio = audio;
         this._trigger("OnAudioUnloaded");
+        this._trigger("OnAnyAudioUnloaded");
       }
 
       for (const group of this.groups.values()) {
@@ -48,6 +63,7 @@ export default function (parentClass) {
             this.loadedGroups.set(group, true);
             this._lastLoadedGroup = group;
             this._trigger("OnGroupLoaded");
+            this._trigger("OnAnyGroupLoaded");
           } else if (!loaded && this.loadedGroups.has(group)) {
             for (const audio of group) {
               if (this.loadedAudio.has(audio)) {
@@ -57,6 +73,7 @@ export default function (parentClass) {
             this.loadedGroups.delete(group);
             this._lastUnloadedGroup = group;
             this._trigger("OnGroupUnloaded");
+            this._trigger("OnAnyGroupUnloaded");
           }
         }
       }
@@ -68,6 +85,7 @@ export default function (parentClass) {
     }
 
     on(tag, callback, options) {
+      this.events = this.events || {};
       if (!this.events[tag]) {
         this.events[tag] = [];
       }
@@ -75,6 +93,7 @@ export default function (parentClass) {
     }
 
     off(tag, callback) {
+      this.events = this.events || {};
       if (this.events[tag]) {
         this.events[tag] = this.events[tag].filter(
           (event) => event.callback !== callback
@@ -83,6 +102,7 @@ export default function (parentClass) {
     }
 
     dispatch(tag) {
+      this.events = this.events || {};
       if (this.events[tag]) {
         this.events[tag].forEach((event) => {
           if (event.options && event.options.params) {

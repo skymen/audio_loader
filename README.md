@@ -1,9 +1,9 @@
 <img src="./src/icon.svg" width="100" /><br>
 # Audio Loader
 <i>An extension to the audio addon to better manage audio loading and unloading</i> <br>
-### Version 1.0.0.0
+### Version 1.0.0.1
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.0.c3addon/audio_loader-1.0.0.0.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.1.c3addon/audio_loader-1.0.0.1.c3addon)
 <br>
 <sub> [See all releases](https://github.com/skymen/audio_loader/releases) </sub> <br>
 
@@ -48,9 +48,9 @@ npm run dev
 | --- | --- | --- |
 | Add audio file to group | Add an audio file to a group | File             *(string)* <br>Group             *(string)* <br> |
 | Remove audio file from group | Remove an audio file from a group | File             *(string)* <br>Group             *(string)* <br> |
-| Load File | Load a single audio file | File             *(string)* <br> |
+| Load Audio | Load a single audio file | File             *(string)* <br> |
 | Load Group | Load all audio files in a group | Group             *(string)* <br> |
-| Unload File | Unload a single audio file | File             *(string)* <br> |
+| Unload Audio | Unload a single audio file | File             *(string)* <br> |
 | Unload Group | Unload all audio files in a group | Group             *(string)* <br> |
 
 
@@ -58,7 +58,7 @@ npm run dev
 ## Conditions
 | Condition | Description | Params
 | --- | --- | --- |
-| Is File Loaded | Check if a specific audio file is loaded | File *(string)* <br> |
+| Is Audio Loaded | Check if a specific audio file is loaded | File *(string)* <br> |
 | Is Group Loaded | Check if all files in a group are loaded | Group *(string)* <br> |
 | On Any Audio Loaded | Triggered when any audio file is loaded |  |
 | On Any Audio Unloaded | Triggered when any audio file is unloaded |  |

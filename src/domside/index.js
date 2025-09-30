@@ -7,9 +7,17 @@ export default function (parentClass) {
       return super.Load().then(() => {
         self.audioLoaderDomInstance.PostToRuntime(
           "update-audio-loaded-status",
-          [this.GetUrl(), true]
+          [this.GetOriginalUrl(), true]
         );
       });
+    }
+
+    Release() {
+      super.Release();
+      self.audioLoaderDomInstance.PostToRuntime("update-audio-loaded-status", [
+        this.GetOriginalUrl(),
+        false,
+      ]);
     }
   };
 
@@ -21,9 +29,17 @@ export default function (parentClass) {
       return super.Load().then(() => {
         self.audioLoaderDomInstance.PostToRuntime(
           "update-audio-loaded-status",
-          [this.GetUrl(), true]
+          [this.GetOriginalUrl(), true]
         );
       });
+    }
+
+    Release() {
+      super.Release();
+      self.audioLoaderDomInstance.PostToRuntime("update-audio-loaded-status", [
+        this.GetOriginalUrl(),
+        false,
+      ]);
     }
   };
 

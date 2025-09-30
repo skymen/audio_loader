@@ -7,17 +7,18 @@ import {
 import _version from "./version.js";
 export const addonType = ADDON_TYPE.PLUGIN;
 export const type = PLUGIN_TYPE.OBJECT;
-export const id = "sample_addon";
-export const name = "Sample Addon";
+export const id = "audio_loader";
+export const name = "Audio Loader";
 export const version = _version;
 export const minConstructVersion = undefined;
 export const author = "skymen";
 export const website = "https://www.construct.net";
 export const documentation = "https://www.construct.net";
-export const description = "Description";
-export const category = ADDON_CATEGORY.GENERAL;
+export const description =
+  "An extension to the audio addon to better manage audio loading and unloading";
+export const category = ADDON_CATEGORY.MEDIA;
 
-export const hasDomside = false;
+export const hasDomside = true;
 export const files = {
   extensionScript: {
     enabled: false, // set to false to disable the extension script

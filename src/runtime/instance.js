@@ -8,6 +8,58 @@ export default function (parentClass) {
       const properties = this._getInitProperties();
       if (properties) {
       }
+      this.groups = new Map();
+      this.loadedAudio = new Map();
+      this.loadedGroups = new Map();
+      this._lastLoadedGroup = null;
+      this._lastUnloadedGroup = null;
+      this._lastLoadedAudio = null;
+      this._lastUnloadedAudio = null;
+
+      this._addDOMMessageHandler(
+        "update-audio-loaded-status",
+        ([audio, loaded]) => {
+          this._updateLoadedAudioStatus(audio, loaded);
+        }
+      );
+    }
+
+    _updateLoadedAudioStatus(audio, loaded) {
+      let curLoadedStatus = this.loadedAudio.get(audio) || false;
+      if (curLoadedStatus === loaded) return;
+      this.loadedAudio.set(audio, loaded);
+
+      if (loaded) {
+        this._lastLoadedAudio = audio;
+        this._trigger("OnAudioLoaded");
+      } else {
+        this._lastUnloadedAudio = audio;
+        this._trigger("OnAudioUnloaded");
+      }
+
+      for (const group of this.groups.values()) {
+        if (group.has(audio)) {
+          if (loaded && !this.loadedGroups.has(group)) {
+            for (const audio of group) {
+              if (!this.loadedAudio.has(audio)) {
+                return;
+              }
+            }
+            this.loadedGroups.set(group, true);
+            this._lastLoadedGroup = group;
+            this._trigger("OnGroupLoaded");
+          } else if (!loaded && this.loadedGroups.has(group)) {
+            for (const audio of group) {
+              if (this.loadedAudio.has(audio)) {
+                return;
+              }
+            }
+            this.loadedGroups.delete(group);
+            this._lastUnloadedGroup = group;
+            this._trigger("OnGroupUnloaded");
+          }
+        }
+      }
     }
 
     _trigger(method) {

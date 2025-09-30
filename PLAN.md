@@ -1,0 +1,9 @@
+- (action) Add audio file to group
+- (action) Remove audio file from group
+- (action) Load File
+- (action) Unload File
+- (action) Load Group
+- (action) Unload Group
+- (condition) Is File Loaded
+- (condition) Is Group Loaded
+- (expression) Group Load Percent

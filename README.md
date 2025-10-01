@@ -1,9 +1,9 @@
 <img src="./src/icon.svg" width="100" /><br>
 # Audio Loader
 <i>An extension to the audio addon to better manage audio loading and unloading</i> <br>
-### Version 1.0.0.3
+### Version 1.0.0.4
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.3.c3addon/audio_loader-1.0.0.3.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.4.c3addon/audio_loader-1.0.0.4.c3addon)
 <br>
 <sub> [See all releases](https://github.com/skymen/audio_loader/releases) </sub> <br>
 

@@ -290,7 +290,7 @@ condition(
     ],
   },
   function (file) {
-    return this.loadedAudio.get(file) || false;
+    return this.loadedAudio.has(file);
   }
 );
 

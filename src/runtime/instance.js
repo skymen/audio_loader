@@ -27,6 +27,8 @@ export default function (parentClass) {
       this._lastUnloadedGroup = null;
       this._lastLoadedAudio = null;
       this._lastUnloadedAudio = null;
+      this._preloadPromises = new Map();
+      this._unloadPromises = new Map();
       this._addDOMMessageHandler(
         "update-audio-loaded-status",
         ([audio, loaded]) => {
@@ -37,6 +39,17 @@ export default function (parentClass) {
 
     async _updateLoadedAudioStatus(audio, loaded) {
       if (!audio) return;
+
+      if (loaded) {
+        let promiseArr = this._preloadPromises.get(audio) || [];
+        promiseArr.forEach((resolve) => resolve());
+        this._preloadPromises.delete(audio);
+      } else {
+        let promiseArr = this._unloadPromises.get(audio) || [];
+        promiseArr.forEach((resolve) => resolve());
+        this._unloadPromises.delete(audio);
+      }
+
       let curLoadedStatus = this.loadedAudio.has(audio);
       if (curLoadedStatus === loaded) return;
       if (loaded) {
@@ -129,12 +142,12 @@ export default function (parentClass) {
 
     _saveToJson() {
       return {
-        // data to be saved for savegames
+        groups: Array.from(this.groups.keys()),
       };
     }
 
     _loadFromJson(o) {
-      // load state for savegames
+      this.groups = new Map(o.groups.map((group) => [group, new Set()]));
     }
   };
 }

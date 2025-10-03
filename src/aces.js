@@ -43,12 +43,12 @@ action(
     isAsync: false,
     listName: "Add audio file to group",
     displayText: "Add {0} to group {1}",
-    description: "Add an audio file to a group",
+    description: "Add an audio file or glob pattern to a group",
     params: [
       {
         id: "file",
         name: "File",
-        desc: "Audio file identifier",
+        desc: "Audio file identifier or glob pattern (e.g. 'sfx/*')",
         type: "string",
         autocompleteId: "audioFile",
         initialValue: "",
@@ -67,7 +67,29 @@ action(
     if (!this.groups.has(group)) {
       this.groups.set(group, new Set());
     }
-    this.groups.get(group).add(file);
+    const groupSet = this.groups.get(group);
+
+    // Check if file contains glob characters
+    if (file.includes("*") || file.includes("?")) {
+      // Convert glob pattern to regex
+      const regexPattern = file
+        .replace(/\./g, "\\.")
+        .replace(/\*/g, ".*")
+        .replace(/\?/g, ".");
+      const regex = new RegExp("^" + regexPattern + "$");
+
+      // Get all audio files from asset manager
+      const audioFiles =
+        globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles;
+      for (const [fileName] of audioFiles) {
+        if (regex.test(fileName)) {
+          groupSet.add(fileName);
+        }
+      }
+    } else {
+      // Single file
+      groupSet.add(file);
+    }
   }
 );
 
@@ -130,17 +152,29 @@ action(
     ],
   },
   async function (file) {
+    if (this.loadedAudio.has(file)) return;
     let audioFile =
       globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles.get(
         file
       );
     if (!audioFile) return;
 
-    await globalThis.__skymen_audio_instance.CallAction(
+    let deferredResolve;
+    let promise = new Promise((resolve) => {
+      deferredResolve = resolve;
+    });
+
+    let promiseArr = this._preloadPromises.get(file) || [];
+    promiseArr.push(deferredResolve);
+    this._preloadPromises.set(file, promiseArr);
+
+    globalThis.__skymen_audio_instance.CallAction(
       C3.Plugins.Audio.Acts.PreloadByName,
       audioFile.isMusic ? 1 : 0,
       audioFile.fileName
     );
+
+    await promise;
   }
 );
 
@@ -166,16 +200,29 @@ action(
     ],
   },
   async function (file) {
+    if (!this.loadedAudio.has(file)) return;
     let audioFile =
       globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles.get(
         file
       );
     if (!audioFile) return;
-    await globalThis.__skymen_audio_instance.CallAction(
+
+    let deferredResolve;
+    let promise = new Promise((resolve) => {
+      deferredResolve = resolve;
+    });
+
+    let promiseArr = this._unloadPromises.get(file) || [];
+    promiseArr.push(deferredResolve);
+    this._unloadPromises.set(file, promiseArr);
+
+    globalThis.__skymen_audio_instance.CallAction(
       C3.Plugins.Audio.Acts.UnloadAudioByName,
       audioFile.isMusic ? 1 : 0,
       audioFile.fileName
     );
+
+    await promise;
   }
 );
 

@@ -2,20 +2,18 @@ import { id, addonType } from "../../config.caw.js";
 import AddonTypeMap from "../../template/addonTypeMap.js";
 
 export default function (parentClass) {
-  try {
-    if (self?.C3?.Plugins?.Audio?.Instance) {
-      self.C3.Plugins.Audio.Instance = class extends (
-        self.C3.Plugins.Audio.Instance
-      ) {
-        constructor(...args) {
-          super(...args);
-          globalThis.__skymen_audio_instance = this;
-        }
-      };
-    } else {
-      alert("This plugin requires the Audio addon to be added to the project");
-    }
-  } catch (e) {}
+  if (typeof self !== "undefined" && self.C3?.Plugins?.Audio?.Instance) {
+    self.C3.Plugins.Audio.Instance = class extends (
+      self.C3.Plugins.Audio.Instance
+    ) {
+      constructor(...args) {
+        super(...args);
+        globalThis.__skymen_audio_instance = this;
+      }
+    };
+  } else if (typeof self !== "undefined") {
+    alert("This plugin requires the Audio addon to be added to the project");
+  }
   return class extends parentClass {
     constructor() {
       super();

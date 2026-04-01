@@ -1,2 +1,7 @@
 {
+  "1.0.0.8": {
+    "added": "",
+    "changed": "",
+    "fixed": "Should no longer crash on older versions of C3"
+  }
 }

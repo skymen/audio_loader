@@ -1,11 +1,16 @@
 <img src="./examples/cover.png" width="150" /><br>
 # Audio Loader
 <i>An extension to the audio addon to better manage audio loading and unloading</i> <br>
-### Version 1.0.0.7
+### Version 1.0.0.8
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.7.c3addon/audio_loader-1.0.0.7.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.8.c3addon/audio_loader-1.0.0.8.c3addon)
 <br>
 <sub> [See all releases](https://github.com/skymen/audio_loader/releases) </sub> <br>
+
+#### What's New in 1.0.0.8
+- **Fixed:** Should no longer crash on older versions of C3
+
+<sub>[View full changelog](#changelog)</sub>
 
 ---
 <b><u>Author:</u></b> skymen <br>
@@ -81,3 +86,10 @@ npm run dev
 | LastLoadedGroup | Returns the name of the last group that was loaded | string |  | 
 | LastUnloadedAudio | Returns the name of the last audio file that was unloaded | string |  | 
 | LastUnloadedGroup | Returns the name of the last group that was unloaded | string |  | 
+
+
+---
+## Changelog
+
+**1.0.0.8**
+- **Fixed:** Should no longer crash on older versions of C3

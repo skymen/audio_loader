@@ -2,18 +2,20 @@ import { id, addonType } from "../../config.caw.js";
 import AddonTypeMap from "../../template/addonTypeMap.js";
 
 export default function (parentClass) {
-  if (self.C3.Plugins.Audio.Instance) {
-    self.C3.Plugins.Audio.Instance = class extends (
-      self.C3.Plugins.Audio.Instance
-    ) {
-      constructor(...args) {
-        super(...args);
-        globalThis.__skymen_audio_instance = this;
-      }
-    };
-  } else {
-    alert("This plugin requires the Audio addon to be added to the project");
-  }
+  try {
+    if (self?.C3?.Plugins?.Audio?.Instance) {
+      self.C3.Plugins.Audio.Instance = class extends (
+        self.C3.Plugins.Audio.Instance
+      ) {
+        constructor(...args) {
+          super(...args);
+          globalThis.__skymen_audio_instance = this;
+        }
+      };
+    } else {
+      alert("This plugin requires the Audio addon to be added to the project");
+    }
+  } catch (e) {}
   return class extends parentClass {
     constructor() {
       super();
@@ -33,7 +35,7 @@ export default function (parentClass) {
         "update-audio-loaded-status",
         ([audio, loaded]) => {
           this._updateLoadedAudioStatus(audio, loaded);
-        }
+        },
       );
     }
 
@@ -113,7 +115,7 @@ export default function (parentClass) {
       this.events = this.events || {};
       if (this.events[tag]) {
         this.events[tag] = this.events[tag].filter(
-          (event) => event.callback !== callback
+          (event) => event.callback !== callback,
         );
       }
     }

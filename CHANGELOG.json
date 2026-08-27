@@ -3,5 +3,10 @@
     "added": "",
     "changed": "",
     "fixed": "Should no longer crash on older versions of C3"
+  },
+  "1.0.0.9": {
+    "added": "",
+    "changed": "",
+    "fixed": "Fixed a bug that could cause naming conflicts on the domside"
   }
 }

@@ -1,19 +1,20 @@
 <img src="./examples/cover.png" width="150" /><br>
 # Audio Loader
 <i>An extension to the audio addon to better manage audio loading and unloading</i> <br>
-### Version 1.0.0.8
+### Version 1.0.0.9
 
-[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.8.c3addon/audio_loader-1.0.0.8.c3addon)
+[<img src="https://placehold.co/200x50/4493f8/FFF?text=Download&font=montserrat" width="200"/>](https://github.com/skymen/audio_loader/releases/download/audio_loader-1.0.0.9.c3addon/audio_loader-1.0.0.9.c3addon)
 <br>
 <sub> [See all releases](https://github.com/skymen/audio_loader/releases) </sub> <br>
 
-#### What's New in 1.0.0.8
-- **Fixed:** Should no longer crash on older versions of C3
+#### What's New in 1.0.0.9
+- **Fixed:** Fixed a bug that could cause naming conflicts on the domside
 
 <sub>[View full changelog](#changelog)</sub>
 
 ---
 <b><u>Author:</u></b> skymen <br>
+<b>[Construct Addon Page](https://www.construct.net/en/make-games/addons/1509/audio-loader)</b>  <br>
 <sub>Made using [CAW](https://marketplace.visualstudio.com/items?itemName=skymen.caw) </sub><br>
 
 ## Table of Contents
@@ -90,6 +91,9 @@ npm run dev
 
 ---
 ## Changelog
+
+**1.0.0.9**
+- **Fixed:** Fixed a bug that could cause naming conflicts on the domside
 
 **1.0.0.8**
 - **Fixed:** Should no longer crash on older versions of C3

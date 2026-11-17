@@ -68,31 +68,32 @@ export default function (parentClass) {
         this._trigger("OnAnyAudioUnloaded");
       }
 
-      for (const groupName of this.groups.keys()) {
-        const group = this.groups.get(groupName);
-        if (group.has(audio)) {
-          if (loaded && !this.loadedGroups.has(groupName)) {
-            for (const audio of group) {
-              if (!this.loadedAudio.has(audio)) {
-                return;
-              }
-            }
-            this.loadedGroups.add(groupName);
-            this._lastLoadedGroup = groupName;
-            this._trigger("OnGroupLoaded");
-            this._trigger("OnAnyGroupLoaded");
-          } else if (!loaded && this.loadedGroups.has(groupName)) {
-            for (const audio of group) {
-              if (this.loadedAudio.has(audio)) {
-                return;
-              }
-            }
-            this.loadedGroups.delete(groupName);
-            this._lastUnloadedGroup = groupName;
-            this._trigger("OnGroupUnloaded");
-            this._trigger("OnAnyGroupUnloaded");
-          }
+      for (const [groupName, group] of this.groups) {
+        if (group.has(audio)) this._updateGroupStatus(groupName);
+      }
+    }
+
+    // A group becomes loaded once all its files are loaded, and unloaded once none
+    // of them are. Call this whenever a file loads or unloads, or the group changes.
+    _updateGroupStatus(groupName) {
+      const group = this.groups.get(groupName);
+      if (!group || group.size === 0) return;
+      if (!this.loadedGroups.has(groupName)) {
+        for (const audio of group) {
+          if (!this.loadedAudio.has(audio)) return;
         }
+        this.loadedGroups.add(groupName);
+        this._lastLoadedGroup = groupName;
+        this._trigger("OnGroupLoaded");
+        this._trigger("OnAnyGroupLoaded");
+      } else {
+        for (const audio of group) {
+          if (this.loadedAudio.has(audio)) return;
+        }
+        this.loadedGroups.delete(groupName);
+        this._lastUnloadedGroup = groupName;
+        this._trigger("OnGroupUnloaded");
+        this._trigger("OnAnyGroupUnloaded");
       }
     }
 

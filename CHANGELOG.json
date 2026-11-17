@@ -8,5 +8,10 @@
     "added": "",
     "changed": "",
     "fixed": "Fixed a bug that could cause naming conflicts on the domside"
+  },
+  "1.0.0.10": {
+    "added": "",
+    "changed": "",
+    "fixed": "Fixed a crash on recent Construct releases (\"Cannot read properties of undefined (reading '_audioFiles')\")\n\"On audio unloaded\" now triggers properly\nLoading a file that is in several groups now checks every group, so all the groups it completes trigger \"On group loaded\"\nAdding an already loaded file to a group, or removing a file from one, now updates the group: \"On group loaded\" triggers when every file left is loaded"
   }
 }

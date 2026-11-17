@@ -79,8 +79,8 @@ action(
       const regex = new RegExp("^" + regexPattern + "$");
 
       // Get all audio files from asset manager
-      const audioFiles =
-        globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles;
+      const audioFiles = globalThis.__skymen_audio_instance._runtime
+        .GetAssetManager()._audioFiles;
       for (const [fileName] of audioFiles) {
         if (regex.test(fileName)) {
           groupSet.add(fileName);
@@ -90,6 +90,9 @@ action(
       // Single file
       groupSet.add(file);
     }
+
+    // The files added may already be loaded
+    this._updateGroupStatus(group);
   }
 );
 
@@ -126,7 +129,13 @@ action(
     const files = this.groups.get(group);
     if (!files) return;
     files.delete(file);
-    if (files.size === 0) this.groups.delete(group);
+    if (files.size === 0) {
+      this.groups.delete(group);
+      this.loadedGroups.delete(group);
+      return;
+    }
+    // The files left may now all be loaded
+    this._updateGroupStatus(group);
   }
 );
 
@@ -153,10 +162,9 @@ action(
   },
   async function (file) {
     if (this.loadedAudio.has(file)) return;
-    let audioFile =
-      globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles.get(
-        file
-      );
+    let audioFile = globalThis.__skymen_audio_instance._runtime
+      .GetAssetManager()
+      ._audioFiles.get(file);
     if (!audioFile) return;
 
     let deferredResolve;
@@ -201,10 +209,9 @@ action(
   },
   async function (file) {
     if (!this.loadedAudio.has(file)) return;
-    let audioFile =
-      globalThis.__skymen_audio_instance._runtime._assetManager._audioFiles.get(
-        file
-      );
+    let audioFile = globalThis.__skymen_audio_instance._runtime
+      .GetAssetManager()
+      ._audioFiles.get(file);
     if (!audioFile) return;
 
     let deferredResolve;
@@ -444,7 +451,7 @@ condition(
     ],
   },
   function (file) {
-    return file === this._lastLoadedAudio;
+    return file === this._lastUnloadedAudio;
   }
 );
 
